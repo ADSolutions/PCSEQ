@@ -9,8 +9,8 @@
 #import "PCSEQVisualizer.h"
 #import "UIImage+Color.h"
 
-#define kWidth 12
 #define kPadding 1
+#define kDefaultBarsWidth 12
 
 @implementation PCSEQVisualizer
 {
@@ -31,7 +31,16 @@
 
 -(void)drawRect:(CGRect)rect
 {
-    self.frame = CGRectMake(0, 0, kPadding *_numberOfBars +(kWidth *_numberOfBars), self.frame.size.height);
+    if (_barsWidth <= 0)
+    {
+        _barsWidth = rect.size.width/(_numberOfBars*kPadding);
+    }
+    else
+    {
+        _barsWidth = kDefaultBarsWidth;
+    }
+    
+    self.frame = CGRectMake(rect.origin.x, rect.origin.y, kPadding *_numberOfBars +(_barsWidth *_numberOfBars), rect.size.height);
     [super drawRect:rect];
 }
 
@@ -51,7 +60,7 @@
     
     for (int i = 0; i < _numberOfBars; i++)
     {
-        UIImageView *bar = [[UIImageView alloc] initWithFrame:CGRectMake(i *kWidth+i *kPadding, 0, kWidth, 1)];
+        UIImageView *bar = [[UIImageView alloc] initWithFrame:CGRectMake(i *_barsWidth+i *kPadding, 0, _barsWidth, 1)];
         bar.image = [UIImage imageWithColor:self.barColor];
         [self addSubview:bar];
         [tempBarArray addObject:bar];

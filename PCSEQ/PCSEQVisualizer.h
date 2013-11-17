@@ -10,7 +10,8 @@
 
 @interface PCSEQVisualizer : UIView
 
-@property (nonatomic, retain) UIColor *barColor;
+@property (nonatomic, strong) UIColor *barColor;
+@property (nonatomic) CGFloat barsWidth;
 @property (nonatomic) NSInteger numberOfBars;
 
 - (id)initWithNumberOfBars:(NSInteger)numberOfBars;
