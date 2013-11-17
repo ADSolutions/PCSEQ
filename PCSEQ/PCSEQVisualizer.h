@@ -10,15 +10,13 @@
 
 @interface PCSEQVisualizer : UIView
 
+@property (nonatomic, retain) UIColor *barColor;
+@property (nonatomic) NSInteger numberOfBars;
 
-@property (nonatomic, retain) UIColor* barColor;
-
-
-- (id)initWithNumberOfBars:(int)numberOfBars;
+- (id)initWithNumberOfBars:(NSInteger)numberOfBars;
 
 //Starts NSTimer and begins the animation
 -(void)start;
-
 
 //Stops NSTimer by invalidating and stops the animation
 -(void)stop;
