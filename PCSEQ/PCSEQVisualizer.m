@@ -81,6 +81,12 @@
     [self setNeedsDisplay];
 }
 
+-(void)setBarColor:(UIColor *)barColor
+{
+    _barColor = barColor;
+    [self setNeedsDisplay];
+}
+
 #pragma mark - Commands
 
 -(void)start
