@@ -10,14 +10,12 @@
 #import "UIImage+Color.h"
 
 #define kWidth 12
-#define kHeight 50
 #define kPadding 1
-
 
 @implementation PCSEQVisualizer
 {
-    NSTimer* timer;
-    NSArray* barArray;
+    NSTimer *_timer;
+    NSArray *_barArray;
 }
 
 - (id)initWithNumberOfBars:(NSInteger)numberOfBars
@@ -33,7 +31,7 @@
 
 -(void)drawRect:(CGRect)rect
 {
-    self.frame = CGRectMake(0, 0, kPadding *_numberOfBars +(kWidth *_numberOfBars), kHeight);
+    self.frame = CGRectMake(0, 0, kPadding *_numberOfBars +(kWidth *_numberOfBars), self.frame.size.height);
     [super drawRect:rect];
 }
 
@@ -41,7 +39,7 @@
 {
     for (UIView *subView in self.subviews)
     {
-        barArray = nil;
+        _barArray = nil;
         
         if ([subView isKindOfClass:[UIImageView class]])
         {
@@ -62,7 +60,7 @@
     CGAffineTransform transform = CGAffineTransformMakeRotation(M_PI_2 *2);
     self.transform = transform;
     
-    barArray = tempBarArray;
+    _barArray = tempBarArray;
 }
 
 #pragma mark - Setters
@@ -78,30 +76,32 @@
 
 -(void)start
 {
-    if (timer)
+    if (_timer)
     {
-        [timer invalidate];
-        timer = nil;
+        [_timer invalidate];
+        _timer = nil;
     }
     
     self.hidden = NO;
-    timer = [NSTimer scheduledTimerWithTimeInterval:.35 target:self selector:@selector(ticker) userInfo:nil repeats:YES];
+    _timer = [NSTimer scheduledTimerWithTimeInterval:.35 target:self selector:@selector(ticker) userInfo:nil repeats:YES];
 }
 
 -(void)stop
 {
-    [timer invalidate];
-    timer = nil;
+    [_timer invalidate];
+    _timer = nil;
 }
 
 -(void)ticker
 {
     [UIView animateWithDuration:.35 animations:^{
         
-        for (UIImageView* bar in barArray)
+        for (UIImageView *bar in _barArray)
         {
+            float height = self.frame.size.height;
+            
             CGRect rect = bar.frame;
-            rect.size.height = arc4random() % kHeight + 1;
+            rect.size.height = arc4random() % (UInt16)height + 1;
             bar.frame = rect;
         }
     }];
