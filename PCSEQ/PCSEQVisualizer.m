@@ -10,7 +10,7 @@
 #import "UIImage+Color.h"
 
 #define kPadding 1
-#define kDefaultBarsWidth 12
+#define kDefaultNumberOfBars 5
 
 @implementation PCSEQVisualizer
 {
@@ -31,16 +31,12 @@
 
 -(void)drawRect:(CGRect)rect
 {
-    if (_barsWidth <= 0)
+    if (_numberOfBars <= 0)
     {
-        _barsWidth = rect.size.width/(_numberOfBars*kPadding);
-    }
-    else
-    {
-        _barsWidth = kDefaultBarsWidth;
+        _numberOfBars = kDefaultNumberOfBars;
     }
     
-    self.frame = CGRectMake(rect.origin.x, rect.origin.y, kPadding *_numberOfBars +(_barsWidth *_numberOfBars), rect.size.height);
+    _barsWidth = rect.size.width/(_numberOfBars +(_numberOfBars*kPadding));
     [super drawRect:rect];
 }
 
@@ -60,7 +56,9 @@
     
     for (int i = 0; i < _numberOfBars; i++)
     {
-        UIImageView *bar = [[UIImageView alloc] initWithFrame:CGRectMake(i *_barsWidth+i *kPadding, 0, _barsWidth, 1)];
+        CGRect frame = [self convertRect:self.frame fromView:self.superview];
+        
+        UIImageView *bar = [[UIImageView alloc] initWithFrame:CGRectMake((self.frame.origin.x/2) + (i *_barsWidth + (i *kPadding)), CGRectGetMinY(frame), _barsWidth, 1)];
         bar.image = [UIImage imageWithColor:self.barColor];
         [self addSubview:bar];
         [tempBarArray addObject:bar];
@@ -113,10 +111,8 @@
         
         for (UIImageView *bar in _barArray)
         {
-            float height = self.frame.size.height;
-            
             CGRect rect = bar.frame;
-            rect.size.height = arc4random() % (UInt16)height + 1;
+            rect.size.height = (arc4random() % (uint)self.frame.size.height) + 1;
             bar.frame = rect;
         }
     }];
